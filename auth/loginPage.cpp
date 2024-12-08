@@ -158,6 +158,7 @@ void registeration() {
         userFile << username << " " << password << " " << balance << endl;
         userFile.close();
         cout << "User account created successfully!\n";
+        userMenu();
 
     } else if (choice == 2) { // Register as rider
         int routeCount;
@@ -178,6 +179,7 @@ void registeration() {
         riderFile << endl;
         riderFile.close();
         cout << "Rider account created successfully!\n";
+        riderMenu();
     }
 }
 
@@ -262,8 +264,20 @@ void loginPage() {
     }
 }
 
+void home()
+{
+    cout<<"Pleae choose what you would like to do 1 view info";
+    int choice;
+    cin>>choice;
+    if(choice==1)
+    {
+        currentUser->displayData();
+    }
+}
+
 // Main function
 int main() {
     loginPage();
+    home();
     return 0;
 }
