@@ -80,12 +80,11 @@ void changePassword() {
 //fill this later
 void chooseOrder()
 {
-    cout<<"Please enter the index of what you would like to your order\n";
+   
 }
 
 void browseMenu() {
-   
-     Menu menu;
+    Menu menu;
 
     // Load menu items from file
     if (!menu.loadMenu("menu/menu.txt")) {
@@ -96,26 +95,68 @@ void browseMenu() {
     // Display full menu
     menu.displayMenu();
 
-    cout<<"Press 1 to manually choose the item to add to your order or 2 to filter by type or 3 to go back\n";
-    int choice=getValidatedInput(1,3);
-    // Filter menu items by type
-    while (choice==2) {
-        cout << "\nEnter a type to filter (or type 'exit' to go back): ";
-        string filterType;
-        cin >> ws;
-        getline(cin, filterType);
+    while (true) {
+        cout << "\nChoose an action:\n";
+        cout << "1. Manually choose an item to add to your order\n";
+        cout << "2. Filter by type\n";
+        cout << "3. Go back\n";
+        cout << "Enter your choice: ";
+        int choice = getValidatedInput(1, 3);
 
-        if (filterType == "exit") {
+        if (choice == 3) {
+            // Go back to the previous menu
             break;
         }
 
-        menu.displayMenuByType(filterType);
-        chooseOrder();
-    }
-    if (choice==1) {
-        chooseOrder();
+        if (choice == 2) {
+            // Filter menu items by type
+            cout << "\nEnter a type to filter (or type 'exit' to go back): ";
+            string filterType;
+            cin >> ws;
+            getline(cin, filterType);
+
+            if (filterType == "exit") {
+                continue; // Restart the loop
+            }
+
+            // Get filtered items
+            vector<MenuItem*> filteredItems = menu.displayMenuByType(filterType);
+
+            if (!filteredItems.empty()) {
+                // Allow user to choose an item from the filtered list
+                cout << "\nChoose an item by index to add to your order (or 0 to skip): ";
+                size_t index = getValidatedInput(0, filteredItems.size());
+
+                if (index > 0 && index <= filteredItems.size()) {
+                    MenuItem* selectedItem = filteredItems[index - 1];
+                    cout << "You selected: ";
+                    selectedItem->display();
+
+                    // Call chooseOrder for further logic
+                    chooseOrder();
+                    // Placeholder: You can now add the selectedItem to an order list
+                    // Example: orders.push_back(selectedItem);
+                }
+            }
+        } else if (choice == 1) {
+            // Manual selection
+            cout << "\nEnter the index of the item to add to your order (or 0 to go back): ";
+            size_t index = getValidatedInput(0, menu.getItems().size());
+
+            if (index > 0 && index <= menu.getItems().size()) {
+                MenuItem* selectedItem = &menu.getItems()[index - 1];
+                cout << "You selected: ";
+                selectedItem->display();
+
+                // Call chooseOrder for further logic
+                chooseOrder();
+                // Placeholder: Add selectedItem to an order list
+                // Example: orders.push_back(selectedItem);
+            }
+        }
     }
 }
+
 
 
 void home() {

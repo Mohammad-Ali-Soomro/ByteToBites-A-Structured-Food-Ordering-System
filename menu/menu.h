@@ -95,22 +95,31 @@ public:
     }
 
     // Display menu items filtered by type
-    void displayMenuByType(const string& filterType) const {
+    vector<MenuItem*> displayMenuByType(const string& filterType) const {
+        vector<MenuItem*> filteredItems; // Temporary list for filtered items
+
         cout << "\n--- Menu Items of Type: " << filterType << " ---\n";
-        bool found = false;
         for (const auto& item : items) {
             if (item.getType() == filterType) {
-                item.display();
-                found = true;
+                filteredItems.push_back(const_cast<MenuItem*>(&item)); // Store pointer to the item
             }
         }
-        if (!found) {
+
+        if (filteredItems.empty()) {
             cout << "No items found for the type: " << filterType << endl;
+        } else {
+            for (size_t i = 0; i < filteredItems.size(); ++i) {
+                cout << i + 1 << ". ";
+                filteredItems[i]->display();
+            }
         }
+
+        return filteredItems; // Return the filtered list
     }
 
+
     // Get all menu items
-    const vector<MenuItem>& getItems() const { return items; }
+     vector<MenuItem>& getItems()  { return items; }
 };
 
 
