@@ -1,0 +1,10 @@
+Burger,599,10,A,Fast Food
+Pizza,849,15,B,Fast Food
+Pasta,799,20,C,Italian
+Ice Cream,399,5,A,Dessert
+Sushi,1249,25,B,Japanese
+Cake,449,10,A,Dessert
+Salad,650,7,C,Healthy
+Steak,1599,30,B,Grill
+Tacos,749,12,A,Fast Food
+Fried Chicken,899,20,B,Fast Food

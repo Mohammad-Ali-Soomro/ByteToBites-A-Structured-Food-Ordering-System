@@ -1,5 +1,10 @@
 #include "auth/loginPage.h"
+#include "menu/menu.h"
 #include <iostream>
+
+
+
+
 
 void changePassword() {
     if (!currentUser) {
@@ -72,6 +77,46 @@ void changePassword() {
     }
 }
 
+//fill this later
+void chooseOrder()
+{
+    cout<<"Please enter the index of what you would like to your order\n";
+}
+
+void browseMenu() {
+   
+     Menu menu;
+
+    // Load menu items from file
+    if (!menu.loadMenu("menu/menu.txt")) {
+        cout << "Failed to load the menu. Please check the file.\n";
+        return;
+    }
+
+    // Display full menu
+    menu.displayMenu();
+
+    cout<<"Press 1 to manually choose the item to add to your order or 2 to filter by type or 3 to go back\n";
+    int choice=getValidatedInput(1,3);
+    // Filter menu items by type
+    while (choice==2) {
+        cout << "\nEnter a type to filter (or type 'exit' to go back): ";
+        string filterType;
+        cin >> ws;
+        getline(cin, filterType);
+
+        if (filterType == "exit") {
+            break;
+        }
+
+        menu.displayMenuByType(filterType);
+        chooseOrder();
+    }
+    if (choice==1) {
+        chooseOrder();
+    }
+}
+
 
 void home() {
     while (true) {
@@ -79,6 +124,8 @@ void home() {
         cout << "1. View Info\n";
         cout << "2. Change Password\n";
         cout << "3. Logout\n";
+        cout<<"4. Browse Menu\n";
+        cout<<"5. Quit\n";
         cout << "Enter your choice: ";
 
         int choice;
@@ -103,9 +150,17 @@ void home() {
                 currentUser = nullptr;
                 loginPage(); // Return to login page
                 return;
+            
+            case 4:
+                browseMenu();
+                break;
+
+            case 5:
+                return;
 
             default:
                 cout << "Invalid choice. Please try again.\n";
+                home();
         }
     }
 }
