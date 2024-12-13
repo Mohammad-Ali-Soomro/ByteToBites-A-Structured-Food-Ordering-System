@@ -1,5 +1,6 @@
 #include "auth/loginPage.h"
 #include "menu/menu.h"
+#include "del/track.h"
 #include <iostream>
 
 
@@ -80,6 +81,12 @@ void changePassword() {
 //fill this later
 void chooseOrder()
 {
+    
+   
+ DeliveryTracking deliveryTracker;
+    deliveryTracker.logDelivery(customerName, riderName, itemName, itemPrice, estimatedTime);
+    deliveryTracker.updateRiderRoutes(riderName, deliveryRoute);
+    deliveryTracker.updateCustomerBalance(customerName, orderAmount);
    
 }
 
@@ -134,6 +141,7 @@ void browseMenu() {
 
                     // Call chooseOrder for further logic
                     chooseOrder();
+                    
                     // Placeholder: You can now add the selectedItem to an order list
                     // Example: orders.push_back(selectedItem);
                 }
