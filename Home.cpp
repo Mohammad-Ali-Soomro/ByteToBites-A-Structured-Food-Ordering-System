@@ -1,7 +1,11 @@
 #include "auth/loginPage.h"
 #include "menu/menu.h"
-#include "del/track.h"
+#include "menu/track.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
+#include <algorithm>
 
 
 
@@ -78,17 +82,135 @@ void changePassword() {
     }
 }
 
-//fill this later
-void chooseOrder()
-{
-    
-   
- DeliveryTracking deliveryTracker;
+
+
+void chooseOrder() {
+    // Vectors to hold customer and rider names
+    vector<string> customers;
+    vector<string> riders;
+
+    // Read customers from users.txt
+    ifstream userFile("auth/users.txt");
+    if (!userFile) {
+        cout << "Error: Unable to open users.txt file.\n";
+        return;
+    }
+    string line, customerName;
+    while (getline(userFile, line)) {
+        istringstream iss(line);
+        iss >> customerName; // First token is the username
+        customers.push_back(customerName);
+    }
+    userFile.close();
+
+    // Read riders from riders.txt
+    ifstream riderFile("auth/riders.txt");
+    if (!riderFile) {
+        cout << "Error: Unable to open riders.txt file.\n";
+        return;
+    }
+    string riderName;
+    while (getline(riderFile, line)) {
+        istringstream iss(line);
+        iss >> riderName; // First token is the username
+        riders.push_back(riderName);
+    }
+    riderFile.close();
+
+    // Display available customers
+    cout << "\nAvailable Customers:\n";
+    for (size_t i = 0; i < customers.size(); ++i) {
+        cout << i + 1 << ". " << customers[i] << "\n";
+    }
+
+    // Let user select a customer
+    int customerChoice;
+    cout << "Select a customer by number: ";
+    cin >> customerChoice;
+    while (customerChoice < 1 || customerChoice > static_cast<int>(customers.size())) {
+        cout << "Invalid choice. Please select a valid customer number: ";
+        cin >> customerChoice;
+    }
+    customerName = customers[customerChoice - 1];
+
+    // Display available riders
+    cout << "\nAvailable Riders:\n";
+    for (size_t i = 0; i < riders.size(); ++i) {
+        cout << i + 1 << ". " << riders[i] << "\n";
+    }
+
+    // Let user select a rider
+    int riderChoice;
+    cout << "Select a rider by number: ";
+    cin >> riderChoice;
+    while (riderChoice < 1 || riderChoice > static_cast<int>(riders.size())) {
+        cout << "Invalid choice. Please select a valid rider number: ";
+        cin >> riderChoice;
+    }
+    riderName = riders[riderChoice - 1];
+
+    // Read menu items from menu.txt
+    ifstream menuFile("menu.txt");
+    if (!menuFile) {
+        cout << "Error: Unable to open menu.txt file.\n";
+        return;
+    }
+
+    vector<pair<string, string>> menuItems; // To store item names and their details
+    string itemName, details, category;
+    int itemPrice, estimatedTime;
+    string deliveryRoute;
+
+    while (getline(menuFile, line)) {
+        istringstream iss(line);
+        string tempItemName, tempRoute;
+        int tempPrice, tempTime;
+
+        getline(iss, tempItemName, ',');
+        iss >> tempPrice;
+        iss.ignore();
+        iss >> tempTime;
+        iss.ignore();
+        getline(iss, tempRoute, ',');
+        getline(iss, category);
+
+        menuItems.push_back({tempItemName, line}); // Store item name and the entire line
+    }
+    menuFile.close();
+
+    // Display available menu items
+    cout << "\nAvailable Menu Items:\n";
+    for (size_t i = 0; i < menuItems.size(); ++i) {
+        cout << i + 1 << ". " << menuItems[i].first << "\n";
+    }
+
+    // Let user select an item
+    int itemChoice;
+    cout << "Select an item by number: ";
+    cin >> itemChoice;
+    while (itemChoice < 1 || itemChoice > static_cast<int>(menuItems.size())) {
+        cout << "Invalid choice. Please select a valid item number: ";
+        cin >> itemChoice;
+    }
+
+    // Fetch selected item details
+    istringstream itemDetailsStream(menuItems[itemChoice - 1].second);
+    getline(itemDetailsStream, itemName, ',');
+    itemDetailsStream >> itemPrice;
+    itemDetailsStream.ignore();
+    itemDetailsStream >> estimatedTime;
+    itemDetailsStream.ignore();
+    getline(itemDetailsStream, deliveryRoute, ',');
+
+    // Log the order
+    DeliveryTracking deliveryTracker;
     deliveryTracker.logDelivery(customerName, riderName, itemName, itemPrice, estimatedTime);
     deliveryTracker.updateRiderRoutes(riderName, deliveryRoute);
-    deliveryTracker.updateCustomerBalance(customerName, orderAmount);
-   
+    deliveryTracker.updateCustomerBalance(customerName, itemPrice);
+
+    cout << "Order placed successfully!" << endl;
 }
+
 
 void browseMenu() {
     Menu menu;
