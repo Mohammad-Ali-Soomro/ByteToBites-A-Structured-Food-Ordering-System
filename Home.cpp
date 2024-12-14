@@ -150,7 +150,7 @@ void chooseOrder() {
     riderName = riders[riderChoice - 1];
 
     // Read menu items from menu.txt
-    ifstream menuFile("menu.txt");
+    ifstream menuFile("menu/menu.txt");
     if (!menuFile) {
         cout << "Error: Unable to open menu.txt file.\n";
         return;

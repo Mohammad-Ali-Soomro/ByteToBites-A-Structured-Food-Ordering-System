@@ -7,8 +7,9 @@
 #include <vector>
 #include <algorithm>
 #include <ctime>
+#include <cstring>
 #include "../CurrentUserData.h"
-#include "menu\menu.h"
+#include "menu.h"
 
 using namespace std;
 
@@ -72,6 +73,11 @@ public:
 
         if (riderFound) {
             ofstream outFile("auth/riders.txt", ios::trunc);
+            if (!outFile) {
+                cerr << "Error: Unable to write to riders file." << endl;
+                return;
+        }
+
             for (const auto& l : lines) {
                 outFile << l << endl;
             }
