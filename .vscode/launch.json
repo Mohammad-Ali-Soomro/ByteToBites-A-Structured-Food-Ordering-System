@@ -8,10 +8,10 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/icon/Downloads/VS code/DSA/ByteToBites-A-Structured-Food-Ordering-System",
-      "program": "c:/Users/icon/Downloads/VS code/DSA/ByteToBites-A-Structured-Food-Ordering-System/build/Debug/outDebug",
+      "cwd": "d:/DSA project",
+      "program": "d:/DSA project/build/Debug/outDebug",
       "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
+      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
