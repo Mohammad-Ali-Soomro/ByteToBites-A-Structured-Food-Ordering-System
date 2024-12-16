@@ -1,3 +1,7 @@
+#ifndef DELIVERY_H
+
+#define DELIVERY_H
+
 #include <iostream>
 #include <queue>
 #include <cstring>
@@ -161,67 +165,6 @@ public:
 };
 
 // Main function to run the system
-int main() {
-    int numLocations;
-    cout << "Enter the number of locations: ";
-    cin >> numLocations;
 
-    OrderManager orderManager(numLocations);
 
-    // Add routes between locations
-    int numRoutes;
-    cout << "Enter the number of routes to add: ";
-    cin >> numRoutes;
-
-    for (int i = 0; i < numRoutes; ++i) {
-        int start, end, distance;
-        cout << "Enter start location, end location and distance for route " << i + 1 << ": ";
-        cin >> start >> end >> distance;
-        orderManager.addRoute(start, end, distance);
-    }
-
-    // Create orders
-    int numOrders;
-    cout << "Enter the number of orders: ";
-    cin >> numOrders;
-
-    for (int i = 0; i < numOrders; ++i) {
-        int orderId, startLocation, endLocation;
-        char customerName[100];
-        
-        cout << "Enter Order ID, Customer Name, Start Location, End Location for order " << i + 1 << ": ";
-        cin >> orderId;
-        cin.ignore();  // To consume newline left by cin
-        cin.getline(customerName, 100);
-        cin >> startLocation >> endLocation;
-        
-        orderManager.createOrder(orderId, customerName, startLocation, endLocation);
-    }
-
-    // Display current orders and their statuses
-    cout << "\nCurrent Orders:\n";
-    orderManager.displayOrders();
-
-    // Update status of orders
-    int orderIdToUpdate;
-    int statusInput;
-    cout << "\nEnter Order ID to update status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
-    cin >> orderIdToUpdate >> statusInput;
-
-    // Convert integer input to OrderStatus enum
-    OrderStatus newStatus = getOrderStatusFromInput(statusInput);
-
-    orderManager.updateOrderStatus(orderIdToUpdate, newStatus);
-
-    cout << "\nUpdated Orders:\n";
-    orderManager.displayOrders();
-
-    // Display route for an order
-    int startLocation, endLocation;
-    cout << "\nEnter start location and end location to find route: ";
-    cin >> startLocation >> endLocation;
-
-    orderManager.findRouteForOrder(startLocation, endLocation);
-
-    return 0;
-}
+#endif

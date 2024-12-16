@@ -1,7 +1,8 @@
 #include "auth/loginPage.h"
 #include "menu/menu.h"
+#include "orderStatus/orders.h"
+#include "orderStatus/delivery.h"
 #include <iostream>
-
 
 
 
@@ -206,11 +207,151 @@ void home() {
     }
 }
 
+void order()
+{
 
+    OrderList orderList;
+
+    int choice;
+    int orderId;
+
+    do {
+        cout << "\nOrder Management System\n";
+        cout << "1. Add Order\n";
+        cout << "2. Display Orders\n";
+        cout << "3. Update Order Status\n";
+        cout << "4. Delete Order\n";
+        cout << "5. Search Order\n";
+        cout << "6. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1: {
+          //  int orderId=0;
+            int statusInput;
+            string customerName;
+            cout << "Enter Order ID: ";
+            cin >> orderId;
+            cin.ignore();  // To consume newline left by cin
+            cout << "Enter Customer Name: ";
+            cin>>customerName;
+            cout << "Enter Order Status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
+            cin >> statusInput;
+
+            OrderStatus status = getOrderStatusFromInput(statusInput);
+            Order newOrder(orderId, customerName, status);
+            orderList.insertOrder(newOrder);
+            break;
+        }
+        case 2:
+            cout << "\nDisplaying All Orders:\n";
+            orderList.displayOrders();
+            break;
+        case 3: {
+            int orderId, statusInput;
+            cout << "Enter Order ID to Update: ";
+            cin >> orderId;
+            cout << "Enter New Status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
+            cin >> statusInput;
+
+            OrderStatus newStatus = getOrderStatusFromInput(statusInput);
+            orderList.updateOrderStatus(orderId, newStatus);
+            break;
+        }
+        case 4: {
+            int orderId;
+            cout << "Enter Order ID to Delete: ";
+            cin >> orderId;
+            orderList.deleteOrder(orderId);
+            break;
+        }
+        case 5: {
+            int orderId;
+            cout << "Enter Order ID to Search: ";
+            cin >> orderId;
+            orderList.searchOrder(orderId);
+            break;
+        }
+        case 6:
+            cout << "Exiting the system.\n";
+            break;
+        default:
+            cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 6);
+
+}
+
+void delivery()
+{
+        int numLocations;
+    cout << "Enter the number of locations: ";
+    cin >> numLocations;
+
+    OrderManager orderManager(numLocations);
+
+    // Add routes between locations
+    int numRoutes;
+    cout << "Enter the number of routes to add: ";
+    cin >> numRoutes;
+
+    for (int i = 0; i < numRoutes; ++i) {
+        int start, end, distance;
+        cout << "Enter start location, end location and distance for route " << i + 1 << ": ";
+        cin >> start >> end >> distance;
+        orderManager.addRoute(start, end, distance);
+    }
+
+    // Create orders
+    int numOrders;
+    cout << "Enter the number of orders: ";
+    cin >> numOrders;
+
+    for (int i = 0; i < numOrders; ++i) {
+        int orderId, startLocation, endLocation;
+        char customerName[100];
+        
+        cout << "Enter Order ID, Customer Name, Start Location, End Location for order " << i + 1 << ": ";
+        cin >> orderId;
+        cin.ignore();  // To consume newline left by cin
+        cin.getline(customerName, 100);
+        cin >> startLocation >> endLocation;
+        
+        orderManager.createOrder(orderId, customerName, startLocation, endLocation);
+    }
+
+    // Display current orders and their statuses
+    cout << "\nCurrent Orders:\n";
+    orderManager.displayOrders();
+
+    // Update status of orders
+    int orderIdToUpdate;
+    int statusInput;
+    cout << "\nEnter Order ID to update status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
+    cin >> orderIdToUpdate >> statusInput;
+
+    // Convert integer input to OrderStatus enum
+    OrderStatus newStatus = getOrderStatusFromInput(statusInput);
+
+    orderManager.updateOrderStatus(orderIdToUpdate, newStatus);
+
+    cout << "\nUpdated Orders:\n";
+    orderManager.displayOrders();
+
+    // Display route for an order
+    int startLocation, endLocation;
+    cout << "\nEnter start location and end location to find route: ";
+    cin >> startLocation >> endLocation;
+
+    orderManager.findRouteForOrder(startLocation, endLocation);
+}
 
 int main()
 {   
     loginPage();
     home();
+    order();
+    delivery();
     return 0;
 }
