@@ -4,3 +4,5 @@ auth/riders.txt
 auth/users.txt
 Home.exe
 menu/menu.exe
+.vscode/c_cpp_properties.json
+.vscode/launch.json
