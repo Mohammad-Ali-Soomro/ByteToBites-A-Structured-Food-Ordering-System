@@ -186,7 +186,7 @@ void chooseOrder() {
 
     // Let user select an item
     int itemChoice;
-    cout << "Select an item by number: ";
+    cout << "Confirm your order by number: ";
     cin >> itemChoice;
     while (itemChoice < 1 || itemChoice > static_cast<int>(menuItems.size())) {
         cout << "Invalid choice. Please select a valid item number: ";
@@ -199,13 +199,13 @@ void chooseOrder() {
     itemDetailsStream >> itemPrice;
     itemDetailsStream.ignore();
     itemDetailsStream >> estimatedTime;
-    itemDetailsStream.ignore();
+    itemDetailsStream.ignore(); 
     getline(itemDetailsStream, deliveryRoute, ',');
 
     // Log the order
     DeliveryTracking deliveryTracker;
     deliveryTracker.logDelivery(customerName, riderName, itemName, itemPrice, estimatedTime);
-    deliveryTracker.updateRiderRoutes(riderName, deliveryRoute);
+    deliveryTracker.updateRiderRoutes(riderName, deliveryRoute);    
     deliveryTracker.updateCustomerBalance(customerName, itemPrice);
 
     cout << "Order placed successfully!" << endl;

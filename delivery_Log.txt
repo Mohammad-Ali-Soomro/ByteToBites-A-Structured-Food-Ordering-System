@@ -1,2 +1,5 @@
 Customer: rafay, Rider: meow, Item: Sushi, Price: Rs 1249, Estimated Time: 25 mins, Timestamp: Sat Dec 14 16:53:22 2024
 Customer: ali, Rider: waheed, Item: Fried Chicken, Price: Rs 899, Estimated Time: 20 mins, Timestamp: Sat Dec 14 16:53:50 2024
+Customer: rafay, Rider: waheed, Item: Pizza, Price: Rs 849, Estimated Time: 15 mins, Timestamp: Mon Dec 16 21:36:52 2024
+Customer: rafay, Rider: waheed, Item: Fried Chicken, Price: Rs 899, Estimated Time: 20 mins, Timestamp: Mon Dec 16 21:59:29 2024
+Customer: rafay, Rider: waheed, Item: Burger, Price: Rs 599, Estimated Time: 10 mins, Timestamp: Mon Dec 16 22:12:03 2024
