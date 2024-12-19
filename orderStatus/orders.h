@@ -1,145 +1,186 @@
-#ifndef ORDERS_H
-#define ORDERS_H
+#pragma once
+
+//#ifndef ORDERS_H
+//#define ORDERS_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <queue>
 #include <ctime>
 
 using namespace std;
 
-// Order Status enum
-enum OrderStatus {
-    PREPARING,
-    DISPATCHED,
-    ON_THE_WAY,
-    DELIVERED
-};
-
-// Function to convert integer input to OrderStatus
-OrderStatus getOrderStatusFromInput(int input) {
-    switch (input) {
-        case 1: return PREPARING;
-        case 2: return DISPATCHED;
-        case 3: return ON_THE_WAY;
-        case 4: return DELIVERED;
-        default: return PREPARING; // Default to PREPARING if invalid input
-    }
-}
-
-// Order class
-class Order {
-public:
-    int orderId;
-    string customerName;
-    OrderStatus status;
-    time_t timestamp;  // To store the order creation time
-
-    Order(int orderId, string customerName = " ", OrderStatus status = PREPARING) {
-        this->orderId = orderId;
-        this->customerName = customerName;
-        this->status = status;
-        this->timestamp = time(0);  // Assign the current time
-    }
-
-    void displayOrderInfo() {
-        const char* statusStrings[] = { "Preparing", "Dispatched", "On the Way", "Delivered" };
-        char timestampStr[100];
-        strftime(timestampStr, sizeof(timestampStr), "%Y-%m-%d %H:%M:%S", localtime(&timestamp));
-        cout << "Order ID: " << orderId << ", Customer: " << customerName 
-             << ", Status: " << statusStrings[status] << ", Timestamp: " << timestampStr << endl;
-    }
-};
-
-// Node class for doubly linked list
-class Node {
-public:
-    Order order;
-    Node* next;
-    Node* prev;
-
-    Node(Order order) : order(order), next(nullptr), prev(nullptr) {}
-};
-
-// Linked list class for order management
-class OrderList {
+class MyOrder {
 private:
-    Node* head;
-    Node* tail;
+    struct OrderNode {
+        int orderID;
+        string foodItems;
+        string deliveryDetails;
+        string status;
+        OrderNode* next;
+        OrderNode* prev;
+    };
+
+    OrderNode* head;
+    OrderNode* tail;
+    int orderCount;
+
+    // Helper function to generate unique Order ID
+    int generateOrderID() {
+        return ++orderCount;
+    }
+
+    // Helper function to get current timestamp
+    string getCurrentTime() {
+        time_t now = time(0);
+        char* dt = ctime(&now);
+        string timestamp = dt;
+        timestamp.pop_back(); // Remove newline character
+        return timestamp;
+    }
 
 public:
-    OrderList() : head(nullptr), tail(nullptr) {}
+    MyOrder() {
+        head = nullptr;
+        tail = nullptr;
+        orderCount = 0;
+    }
+    
+    ~MyOrder() {
+        while (head != nullptr) {
+            OrderNode* temp = head;
+            head = head->next;
+            delete temp;
+        }
+    }
 
-    // Insert a new order at the end
-    void insertOrder(Order newOrder) {
-        Node* newNode = new Node(newOrder);
-        if (!head) {
-            head = tail = newNode;  // First node in the list
+    void placeOrder() {
+        string foodItems, deliveryDetails;
+
+        cout << "Enter food items (comma-separated): ";
+        cin.ignore();
+        getline(cin, foodItems);
+
+        cout << "Enter delivery details (address, phone number): ";
+        getline(cin, deliveryDetails);
+
+        int newOrderID = generateOrderID();
+        string initialStatus = "Pending";
+
+        // Create a new order node
+        OrderNode* newOrder = new OrderNode;
+        newOrder->orderID = newOrderID;
+        newOrder->foodItems = foodItems;
+        newOrder->deliveryDetails = deliveryDetails;
+        newOrder->status = initialStatus;
+        newOrder->next = nullptr;
+        newOrder->prev = tail;
+
+        if (tail != nullptr) {
+            tail->next = newOrder;
+        }
+        tail = newOrder;
+
+        if (head == nullptr) {
+            head = newOrder;
+        }
+
+        // Store order details in a file
+        ofstream file("orders.txt", ios::app);
+        if (file.is_open()) {
+            file << "Order ID: " << newOrderID << "\n"
+                 << "Food Items: " << foodItems << "\n"
+                 << "Delivery Details: " << deliveryDetails << "\n"
+                 << "Status: " << initialStatus << "\n"
+                 << "Timestamp: " << getCurrentTime() << "\n\n";
+            file.close();
+        }
+
+        cout << "Order placed successfully! Your Order ID is: " << newOrderID << endl;
+    }
+
+    void viewOrderHistory() {
+        if (head == nullptr) {
+            cout << "No past orders found." << endl;
+            return;
+        }
+
+        cout << "Order History:\n";
+        OrderNode* current = head;
+        while (current != nullptr) {
+            cout << "Order ID: " << current->orderID << "\n"
+                 << "Food Items: " << current->foodItems << "\n"
+                 << "Delivery Details: " << current->deliveryDetails << "\n"
+                 << "Status: " << current->status << "\n\n";
+            current = current->next;
+        }
+    }
+
+    void cancelOrder(int orderID) {
+        OrderNode* current = head;
+
+        while (current != nullptr && current->orderID != orderID) {
+            current = current->next;
+        }
+
+        if (current == nullptr) {
+            cout << "Order ID not found or already processed." << endl;
+            return;
+        }
+
+        if (current->status != "Pending") {
+            cout << "Order cannot be canceled as it is already " << current->status << "." << endl;
+            return;
+        }
+
+        // Remove order from the list
+        if (current->prev != nullptr) {
+            current->prev->next = current->next;
         } else {
-            tail->next = newNode;
-            newNode->prev = tail;
-            tail = newNode;  // Move the tail to the new node
+            head = current->next;
         }
+
+        if (current->next != nullptr) {
+            current->next->prev = current->prev;
+        } else {
+            tail = current->prev;
+        }
+
+        delete current;
+        cout << "Order canceled successfully." << endl;
     }
 
-    // Display all orders
-    void displayOrders() {
-        Node* current = head;
-        while (current) {
-            current->order.displayOrderInfo();
+    void updateOrderStatus(int orderID, const string& newStatus) {
+        OrderNode* current = head;
+
+        while (current != nullptr && current->orderID != orderID) {
             current = current->next;
         }
+
+        if (current == nullptr) {
+            cout << "Order ID not found." << endl;
+            return;
+        }
+
+        current->status = newStatus;
+        cout << "Order status updated to: " << newStatus << endl;
     }
 
-    // Update an order's status
-    void updateOrderStatus(int orderId, OrderStatus newStatus) {
-        Node* current = head;
-        while (current) {
-            if (current->order.orderId == orderId) {
-                current->order.status = newStatus;
-                cout << "Updated Order ID " << orderId << " Status." << endl;
-                return;
-            }
-            current = current->next;
-        }
-        cout << "Order ID not found." << endl;
-    }
+    void trackOrder(int orderID) {
+        OrderNode* current = head;
 
-    // Delete an order by order ID
-    void deleteOrder(int orderId) {
-        Node* current = head;
-        while (current) {
-            if (current->order.orderId == orderId) {
-                if (current->prev) {
-                    current->prev->next = current->next;
-                } else {
-                    head = current->next;  // If deleting the head
-                }
-                if (current->next) {
-                    current->next->prev = current->prev;
-                } else {
-                    tail = current->prev;  // If deleting the tail
-                }
-                delete current;
-                cout << "Deleted Order ID " << orderId << endl;
-                return;
-            }
+        while (current != nullptr && current->orderID != orderID) {
             current = current->next;
         }
-        cout << "Order ID not found." << endl;
-    }
 
-    // Search for an order by order ID
-    void searchOrder(int orderId) {
-        Node* current = head;
-        while (current) {
-            if (current->order.orderId == orderId) {
-                current->order.displayOrderInfo();
-                return;
-            }
-            current = current->next;
+        if (current == nullptr) {
+            cout << "Order ID not found." << endl;
+            return;
         }
-        cout << "Order ID not found." << endl;
+
+        cout << "Order Status for Order ID " << orderID << ": " << current->status << endl;
     }
 };
 
-#endif
+//#endif

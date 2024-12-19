@@ -1,11 +1,12 @@
 #include "auth/loginPage.h"
 #include "menu/menu.h"
 #include "orderStatus/orders.h"
-#include "orderStatus/delivery.h"
+//#include "orderStatus/delivery.h"
 #include <iostream>
+#pragma once
 
 
-
+using namespace std;
 
 void changePassword() {
     if (!currentUser) {
@@ -209,81 +210,66 @@ void home() {
 
 void order()
 {
-
-    OrderList orderList;
-
+    MyOrder orderSystem;
     int choice;
-    int orderId;
 
     do {
-        cout << "\nOrder Management System\n";
-        cout << "1. Add Order\n";
-        cout << "2. Display Orders\n";
-        cout << "3. Update Order Status\n";
-        cout << "4. Delete Order\n";
-        cout << "5. Search Order\n";
+        cout << "\n--- Food Delivery and Ordering System ---\n";
+        cout << "1. Place an Order\n";
+        cout << "2. View Order History\n";
+        cout << "3. Cancel an Order\n";
+        cout << "4. Track an Order\n";
+        cout << "5. Update Order Status (Admin)\n";
         cout << "6. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
 
         switch (choice) {
-        case 1: {
-          //  int orderId=0;
-            int statusInput;
-            string customerName;
-            cout << "Enter Order ID: ";
-            cin >> orderId;
-            cin.ignore();  // To consume newline left by cin
-            cout << "Enter Customer Name: ";
-            cin>>customerName;
-            cout << "Enter Order Status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
-            cin >> statusInput;
-
-            OrderStatus status = getOrderStatusFromInput(statusInput);
-            Order newOrder(orderId, customerName, status);
-            orderList.insertOrder(newOrder);
-            break;
-        }
-        case 2:
-            cout << "\nDisplaying All Orders:\n";
-            orderList.displayOrders();
-            break;
-        case 3: {
-            int orderId, statusInput;
-            cout << "Enter Order ID to Update: ";
-            cin >> orderId;
-            cout << "Enter New Status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
-            cin >> statusInput;
-
-            OrderStatus newStatus = getOrderStatusFromInput(statusInput);
-            orderList.updateOrderStatus(orderId, newStatus);
-            break;
-        }
-        case 4: {
-            int orderId;
-            cout << "Enter Order ID to Delete: ";
-            cin >> orderId;
-            orderList.deleteOrder(orderId);
-            break;
-        }
-        case 5: {
-            int orderId;
-            cout << "Enter Order ID to Search: ";
-            cin >> orderId;
-            orderList.searchOrder(orderId);
-            break;
-        }
-        case 6:
-            cout << "Exiting the system.\n";
-            break;
-        default:
-            cout << "Invalid choice! Try again.\n";
+            case 1:
+                orderSystem.placeOrder();
+                break;
+            case 2:
+                orderSystem.viewOrderHistory();
+                break;
+            case 3: {
+                int orderID;
+                cout << "Enter Order ID to cancel: ";
+                cin >> orderID;
+                orderSystem.cancelOrder(orderID);
+                break;
+            }
+            case 4: {
+                int orderID;
+                cout << "Enter Order ID to track: ";
+                cin >> orderID;
+                orderSystem.trackOrder(orderID);
+                break;
+            }
+            case 5: {
+                int orderID;
+                string newStatus;
+                cout << "Enter Order ID to update: ";
+                cin >> orderID;
+                cin.ignore(); // Clear buffer
+                cout << "Enter new status (e.g., Preparing, Dispatched, Delivered): ";
+                getline(cin, newStatus);
+                orderSystem.updateOrderStatus(orderID, newStatus);
+                break;
+            }
+            case 6:
+                cout << "Exiting the system. Goodbye!\n";
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
         }
     } while (choice != 6);
 
+    
 }
 
-void delivery()
+
+
+/*void delivery()
 {
         int numLocations;
     cout << "Enter the number of locations: ";
@@ -346,12 +332,14 @@ void delivery()
 
     orderManager.findRouteForOrder(startLocation, endLocation);
 }
+*/
+
 
 int main()
 {   
     loginPage();
     home();
     order();
-    delivery();
+   // delivery();
     return 0;
 }
