@@ -1,9 +1,9 @@
 #include "auth/loginPage.h"
 #include "menu/menu.h"
 #include "orderStatus/orders.h"
-//#include "orderStatus/delivery.h"
+#include "orderStatus/delivery.h"
 #include <iostream>
-#pragma once
+
 
 
 using namespace std;
@@ -268,78 +268,91 @@ void order()
 }
 
 
-
-/*void delivery()
+void delivery()
 {
-        int numLocations;
-    cout << "Enter the number of locations: ";
-    cin >> numLocations;
+    // Initialize the delivery system with 5 locations
+    Delivery deliverySystem(5);
 
-    OrderManager orderManager(numLocations);
+    cout << "Welcome to the Delivery Management System!" << endl;
 
-    // Add routes between locations
-    int numRoutes;
-    cout << "Enter the number of routes to add: ";
-    cin >> numRoutes;
+    int choice;
+    while (true) {
+        cout << "\nMenu:\n";
+        cout << "1. Add Delivery Agent\n";
+        cout << "2. Add Delivery Route\n";
+        cout << "3. Assign Agent to Order\n";
+        cout << "4. Complete an Order\n";
+        cout << "5. Find Shortest Route\n";
+        cout << "6. Display Agent Details\n";
+        cout << "7. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    for (int i = 0; i < numRoutes; ++i) {
-        int start, end, distance;
-        cout << "Enter start location, end location and distance for route " << i + 1 << ": ";
-        cin >> start >> end >> distance;
-        orderManager.addRoute(start, end, distance);
+        switch (choice) {
+            case 1: {
+                string agentName;
+                cout << "Enter the name of the delivery agent: ";
+                cin >> agentName;
+                deliverySystem.addDeliveryAgent(agentName);
+                break;
+            }
+            case 2: {
+                int from, to, distance;
+                cout << "Enter starting location (0-4): ";
+                cin >> from;
+                cout << "Enter destination location (0-4): ";
+                cin >> to;
+                cout << "Enter distance between locations: ";
+                cin >> distance;
+                deliverySystem.addDeliveryRoute(from, to, distance);
+                break;
+            }
+            case 3: {
+                int orderID;
+                cout << "Enter the order ID to assign: ";
+                cin >> orderID;
+                deliverySystem.assignAgent(orderID);
+                break;
+            }
+            case 4: {
+                string agentName;
+                cout << "Enter the name of the agent completing the order: ";
+                cin >> agentName;
+                deliverySystem.completeOrder(agentName);
+                break;
+            }
+            case 5: {
+                int start, end;
+                cout << "Enter starting location (0-4): ";
+                cin >> start;
+                cout << "Enter destination location (0-4): ";
+                cin >> end;
+                deliverySystem.findShortestRoute(start, end);
+                break;
+            }
+            case 6: {
+                deliverySystem.displayAgentDetails();
+                break;
+            }
+            case 7: {
+                cout << "Exiting the system. Goodbye!\n";
+                return;
+            }
+            default: {
+                cout << "Invalid choice. Please try again.\n";
+                break;
+            }
+        }
     }
 
-    // Create orders
-    int numOrders;
-    cout << "Enter the number of orders: ";
-    cin >> numOrders;
-
-    for (int i = 0; i < numOrders; ++i) {
-        int orderId, startLocation, endLocation;
-        char customerName[100];
-        
-        cout << "Enter Order ID, Customer Name, Start Location, End Location for order " << i + 1 << ": ";
-        cin >> orderId;
-        cin.ignore();  // To consume newline left by cin
-        cin.getline(customerName, 100);
-        cin >> startLocation >> endLocation;
-        
-        orderManager.createOrder(orderId, customerName, startLocation, endLocation);
-    }
-
-    // Display current orders and their statuses
-    cout << "\nCurrent Orders:\n";
-    orderManager.displayOrders();
-
-    // Update status of orders
-    int orderIdToUpdate;
-    int statusInput;
-    cout << "\nEnter Order ID to update status (1: Preparing, 2: Dispatched, 3: On the Way, 4: Delivered): ";
-    cin >> orderIdToUpdate >> statusInput;
-
-    // Convert integer input to OrderStatus enum
-    OrderStatus newStatus = getOrderStatusFromInput(statusInput);
-
-    orderManager.updateOrderStatus(orderIdToUpdate, newStatus);
-
-    cout << "\nUpdated Orders:\n";
-    orderManager.displayOrders();
-
-    // Display route for an order
-    int startLocation, endLocation;
-    cout << "\nEnter start location and end location to find route: ";
-    cin >> startLocation >> endLocation;
-
-    orderManager.findRouteForOrder(startLocation, endLocation);
 }
-*/
-
+  
 
 int main()
 {   
     loginPage();
     home();
     order();
-   // delivery();
+    delivery();
     return 0;
 }

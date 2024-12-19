@@ -1,0 +1,6 @@
+Order ID: 1
+Food Items: Burger
+Delivery Details: Burger, 10000
+Status: Pending
+Timestamp: Thu Dec 19 23:55:55 2024
+

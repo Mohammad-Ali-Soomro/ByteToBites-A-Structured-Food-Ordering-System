@@ -1,0 +1,6 @@
+Order ID: 1
+Food Items: Pizza, Burger
+Delivery Details: Giki H10, 3232
+Status: Pending
+Timestamp: Thu Dec 19 23:36:40 2024
+
