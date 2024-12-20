@@ -398,10 +398,10 @@ void delivery()
 
 int main()
 {   
-  //  loginPage();
-  //  home();
-   // order();
-   // delivery();
+    loginPage();
+    home();
+    order();
+    delivery();
    customer();
     return 0;
 }
