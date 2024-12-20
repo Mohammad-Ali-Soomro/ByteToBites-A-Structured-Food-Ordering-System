@@ -2,6 +2,7 @@
 #include "menu/menu.h"
 #include "orderStatus/orders.h"
 #include "orderStatus/delivery.h"
+#include "orderStatus/customer.h"
 #include <iostream>
 
 
@@ -160,6 +161,53 @@ void browseMenu() {
 }
 
 
+void customer()
+{
+    
+    CustomerManagement cm;
+    int choice, id;
+    string name, contact;
+
+    do {
+        cout << "\n--- Customer Management Module ---\n";
+        cout << "1. Add Customer\n";
+        cout << "2. Search Customer\n";
+        cout << "3. Display All Customers\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            cout << "Enter Customer ID: ";
+            cin >> id;
+            cout << "Enter Name: ";
+            cin.ignore();
+            getline(cin, name);
+            cout << "Enter Contact: ";
+            getline(cin, contact);
+            cm.addCustomer(id, name, contact);
+            break;
+        case 2:
+            cout << "Enter Customer ID to Search: ";
+            cin >> id;
+            cm.searchCustomer(id);
+            break;
+        case 3:
+            cm.displayAllCustomers();
+            break;
+        case 4:
+            cout << "Exiting...\n";
+            break;
+        default:
+            cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 4);
+
+    
+
+}
+
 
 void home() {
     while (true) {
@@ -214,7 +262,7 @@ void order()
     int choice;
 
     do {
-        cout << "\n--- Food Delivery and Ordering System ---\n";
+        cout << "\n--- Order Delivery Module ---\n";
         cout << "1. Place an Order\n";
         cout << "2. View Order History\n";
         cout << "3. Cancel an Order\n";
@@ -350,9 +398,10 @@ void delivery()
 
 int main()
 {   
-    loginPage();
-    home();
-    order();
-    delivery();
+  //  loginPage();
+  //  home();
+   // order();
+   // delivery();
+   customer();
     return 0;
 }
