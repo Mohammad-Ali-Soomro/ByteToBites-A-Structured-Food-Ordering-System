@@ -1,5 +1,4 @@
-#ifndef LOGIN_PAGE_H
-#define LOGIN_PAGE_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -11,23 +10,24 @@
 using namespace std;
 
 // Global user pointer
-CurrentUser* currentUser; // Declare global pointer to store the logged-in user
+CurrentUser* currentUser = nullptr; // Initialize global pointer to store the logged-in user
 
-const string USERS_FILE = "auth/users.txt";
-const string RIDERS_FILE = "auth/riders.txt";
-const string ADMINS_FILE = "auth/admins.txt";
-
+const string USERS_FILE = "D:\\Dsa Project\\auth\\users.txt";
+const string RIDERS_FILE = "D:\\Dsa Project\\auth\\riders.txt";
+const string ADMINS_FILE = "D:\\Dsa Project\\auth\\admins.txt";
 
 // Function prototypes
 void loginUser();
 void loginRider();
 void loginAdmin();
-void registeration();
+void registerAccount();
 int getValidatedInput(int min, int max);
 void riderMenu();
 void userMenu();
 void loginPage();
 bool validateCredentials(const string& filename, const string& username, const string& password);
+void displayErrorMessage(const string& message);
+bool validateFile(const string& filename);
 
 // User login function
 void loginUser() {
@@ -38,16 +38,18 @@ void loginUser() {
     cout << "Enter Password: ";
     cin >> password;
 
-    double balance;
     ifstream userFile(USERS_FILE);
+    if (!validateFile(USERS_FILE)) return;
+
     string fileUsername, filePassword;
     double fileBalance;
-
     bool userFound = false;
+
     while (userFile >> fileUsername >> filePassword >> fileBalance) {
         if (fileUsername == username && filePassword == password) {
             userFound = true;
-            balance = fileBalance;
+            if (currentUser) delete currentUser; // Clean up previous user
+            currentUser = new CurrentCustomer(username, password, fileBalance);
             break;
         }
     }
@@ -55,11 +57,9 @@ void loginUser() {
 
     if (userFound) {
         cout << "Login successful! Welcome, " << username << "!\n";
-        if (currentUser) delete currentUser; // Clean up previous user
-        currentUser = new CurrentCustomer(username, password, balance);
+       // userMenu();
     } else {
-        cout << "Account not found or invalid credentials.\n";
-        cout << "Returning to User Menu...\n";
+        displayErrorMessage("Invalid credentials or account not found.");
         userMenu();
     }
 }
@@ -73,6 +73,8 @@ void loginRider() {
     cout << "Enter Password: ";
     cin >> password;
 
+    if (!validateFile(RIDERS_FILE)) return;
+
     ifstream riderFile(RIDERS_FILE);
     string fileUsername, filePassword, route;
     vector<string> routes;
@@ -84,9 +86,7 @@ void loginRider() {
         iss >> fileUsername >> filePassword;
         if (fileUsername == username && filePassword == password) {
             riderFound = true;
-            while (iss >> route) {
-                routes.push_back(route);
-            }
+            while (iss >> route) routes.push_back(route);
             break;
         }
     }
@@ -96,9 +96,9 @@ void loginRider() {
         cout << "Login successful! Welcome, Rider " << username << "!\n";
         if (currentUser) delete currentUser; // Clean up previous user
         currentUser = new CurrentRider(username, password, routes);
+      //  riderMenu();
     } else {
-        cout << "Account not found or invalid credentials.\n";
-        cout << "Returning to Rider Menu...\n";
+        displayErrorMessage("Invalid credentials or account not found.");
         riderMenu();
     }
 }
@@ -116,16 +116,14 @@ void loginAdmin() {
         cout << "Login successful! Welcome, Admin " << username << "!\n";
         if (currentUser) delete currentUser; // Clean up previous user
         currentUser = new CurrentAdmin(username, password);
-        currentUser->displayData();
     } else {
-        cout << "Account not found or invalid credentials.\n";
-        cout << "Please contact tech support. Returning to Login Page\n";
-        loginPage();
+        displayErrorMessage("Invalid credentials or account not found.");
     }
+    loginPage();
 }
 
-// Registration function for both users and riders
-void registeration() {
+// Registration function for users and riders
+void registerAccount() {
     cout << "\n--- Registration ---\n";
     cout << "1. Register as User\n";
     cout << "2. Register as Rider\n";
@@ -144,6 +142,7 @@ void registeration() {
         cin >> balance;
 
         ofstream userFile(USERS_FILE, ios::app);
+        if (!validateFile(USERS_FILE)) return;
         userFile << username << " " << password << " " << balance << endl;
         userFile.close();
         cout << "User account created successfully!\n";
@@ -160,15 +159,38 @@ void registeration() {
         }
 
         ofstream riderFile(RIDERS_FILE, ios::app);
+        if (!validateFile(RIDERS_FILE)) return;
         riderFile << username << " " << password;
-        for (const auto& route : routes) {
-            riderFile << " " << route;
-        }
+        for (const auto& route : routes) riderFile << " " << route;
         riderFile << endl;
         riderFile.close();
         cout << "Rider account created successfully!\n";
-        riderMenu();
+       // riderMenu();
     }
+}
+
+// Utility functions
+bool validateFile(const string& filename) {
+    ifstream file(filename);
+    if (!file) {
+        displayErrorMessage("Error: Unable to open file " + filename + ".");
+        return false;
+    }
+    file.close();
+    return true;
+}
+
+bool validateCredentials(const string& filename, const string& username, const string& password) {
+    ifstream file(filename);
+    string fileUsername, filePassword;
+    while (file >> fileUsername >> filePassword) {
+        if (fileUsername == username && filePassword == password) return true;
+    }
+    return false;
+}
+
+void displayErrorMessage(const string& message) {
+    cout << "Error: " << message << "\nReturning to the main menu...\n";
 }
 
 // Input validation function
@@ -184,22 +206,6 @@ int getValidatedInput(int min, int max) {
     return choice;
 }
 
-bool validateCredentials(const string& filename, const string& username, const string& password) {
-    ifstream file(filename);
-    if (!file) {
-        cout << "Error: Unable to open file " << filename << ".\n";
-        return false;
-    }
-
-    string fileUsername, filePassword;
-    while (file >> fileUsername >> filePassword) {
-        if (fileUsername == username && filePassword == password) {
-            return true;
-        }
-    }
-    return false;
-}
-
 // User menu function
 void userMenu() {
     cout << "\n--- User Menu ---\n";
@@ -210,8 +216,8 @@ void userMenu() {
 
     if (choice == 1) {
         loginUser();
-    } else if (choice == 2) {
-        registeration();
+    } else {
+        registerAccount();
     }
 }
 
@@ -225,8 +231,8 @@ void riderMenu() {
 
     if (choice == 1) {
         loginRider();
-    } else if (choice == 2) {
-        registeration();
+    } else {
+        registerAccount();
     }
 }
 
@@ -247,10 +253,7 @@ void loginPage() {
         userMenu();
     } else if (choice == 2) {
         riderMenu();
-    } else if (choice == 3) {
+    } else {
         loginAdmin();
     }
-
 }
-
-#endif // LOGIN_PAGE_H

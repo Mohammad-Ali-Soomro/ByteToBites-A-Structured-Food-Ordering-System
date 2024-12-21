@@ -1,3 +1,5 @@
-rafay meow 3000
-ali meow 7000
-ali 123 200
+ali 123
+meow
+500
+ali 123 300
+Zeeshan meow 5000

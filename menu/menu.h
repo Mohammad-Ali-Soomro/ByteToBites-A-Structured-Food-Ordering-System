@@ -1,5 +1,4 @@
-#ifndef MENU_H
-#define MENU_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -123,4 +122,4 @@ public:
 };
 
 
-#endif // MENU_H
+

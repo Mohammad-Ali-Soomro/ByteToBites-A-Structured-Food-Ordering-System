@@ -5,10 +5,19 @@
 #include "orderStatus/customer.h"
 #include <iostream>
 
-
-
 using namespace std;
 
+// Function declarations
+void changePassword();
+void chooseOrder();
+void browseMenu();
+void customer();
+void home();
+void order();
+void delivery();
+void mainMenu();
+
+// Function to change password
 void changePassword() {
     if (!currentUser) {
         cout << "Error: No user is currently logged in.\n";
@@ -80,12 +89,12 @@ void changePassword() {
     }
 }
 
-//fill this later
-void chooseOrder()
-{
-   
+// Function to choose an order
+void chooseOrder() {
+    // Placeholder for order selection logic
 }
 
+// Function to browse the menu
 void browseMenu() {
     Menu menu;
 
@@ -160,10 +169,8 @@ void browseMenu() {
     }
 }
 
-
-void customer()
-{
-    
+// Function to manage customers
+void customer() {
     CustomerManagement cm;
     int choice, id;
     string name, contact;
@@ -203,61 +210,10 @@ void customer()
             cout << "Invalid choice. Try again.\n";
         }
     } while (choice != 4);
-
-    
-
 }
 
-
-void home() {
-    while (true) {
-        cout << "\nPlease choose an action:\n";
-        cout << "1. View Info\n";
-        cout << "2. Change Password\n";
-        cout << "3. Logout\n";
-        cout<<"4. Browse Menu\n";
-        cout<<"5. Quit\n";
-        cout << "Enter your choice: ";
-
-        int choice;
-        cin >> choice;
-
-        switch (choice) {
-            case 1:
-                if (currentUser) {
-                    currentUser->displayData();
-                } else {
-                    cout << "No user is logged in.\n";
-                }
-                break;
-
-            case 2:
-                changePassword();
-                break;
-
-            case 3:
-                cout << "Logging out...\n";
-                delete currentUser; // Clean up currentUser
-                currentUser = nullptr;
-                loginPage(); // Return to login page
-                return;
-            
-            case 4:
-                browseMenu();
-                break;
-
-            case 5:
-                return;
-
-            default:
-                cout << "Invalid choice. Please try again.\n";
-                home();
-        }
-    }
-}
-
-void order()
-{
+// Function to manage orders
+void order() {
     MyOrder orderSystem;
     int choice;
 
@@ -273,51 +229,48 @@ void order()
         cin >> choice;
 
         switch (choice) {
-            case 1:
-                orderSystem.placeOrder();
-                break;
-            case 2:
-                orderSystem.viewOrderHistory();
-                break;
-            case 3: {
-                int orderID;
-                cout << "Enter Order ID to cancel: ";
-                cin >> orderID;
-                orderSystem.cancelOrder(orderID);
-                break;
-            }
-            case 4: {
-                int orderID;
-                cout << "Enter Order ID to track: ";
-                cin >> orderID;
-                orderSystem.trackOrder(orderID);
-                break;
-            }
-            case 5: {
-                int orderID;
-                string newStatus;
-                cout << "Enter Order ID to update: ";
-                cin >> orderID;
-                cin.ignore(); // Clear buffer
-                cout << "Enter new status (e.g., Preparing, Dispatched, Delivered): ";
-                getline(cin, newStatus);
-                orderSystem.updateOrderStatus(orderID, newStatus);
-                break;
-            }
-            case 6:
-                cout << "Exiting the system. Goodbye!\n";
-                break;
-            default:
-                cout << "Invalid choice. Please try again.\n";
+        case 1:
+            orderSystem.placeOrder();
+            break;
+        case 2:
+            orderSystem.viewOrderHistory();
+            break;
+        case 3: {
+            int orderID;
+            cout << "Enter Order ID to cancel: ";
+            cin >> orderID;
+            orderSystem.cancelOrder(orderID);
+            break;
+        }
+        case 4: {
+            int orderID;
+            cout << "Enter Order ID to track: ";
+            cin >> orderID;
+            orderSystem.trackOrder(orderID);
+            break;
+        }
+        case 5: {
+            int orderID;
+            string newStatus;
+            cout << "Enter Order ID to update: ";
+            cin >> orderID;
+            cin.ignore(); // Clear buffer
+            cout << "Enter new status (e.g., Preparing, Dispatched, Delivered): ";
+            getline(cin, newStatus);
+            orderSystem.updateOrderStatus(orderID, newStatus);
+            break;
+        }
+        case 6:
+            cout << "Exiting the system. Goodbye!\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
         }
     } while (choice != 6);
-
-    
 }
 
-
-void delivery()
-{
+// Function to manage deliveries
+void delivery() {
     // Initialize the delivery system with 5 locations
     Delivery deliverySystem(5);
 
@@ -337,71 +290,123 @@ void delivery()
         cin >> choice;
 
         switch (choice) {
-            case 1: {
-                string agentName;
-                cout << "Enter the name of the delivery agent: ";
-                cin >> agentName;
-                deliverySystem.addDeliveryAgent(agentName);
-                break;
-            }
-            case 2: {
-                int from, to, distance;
-                cout << "Enter starting location (0-4): ";
-                cin >> from;
-                cout << "Enter destination location (0-4): ";
-                cin >> to;
-                cout << "Enter distance between locations: ";
-                cin >> distance;
-                deliverySystem.addDeliveryRoute(from, to, distance);
-                break;
-            }
-            case 3: {
-                int orderID;
-                cout << "Enter the order ID to assign: ";
-                cin >> orderID;
-                deliverySystem.assignAgent(orderID);
-                break;
-            }
-            case 4: {
-                string agentName;
-                cout << "Enter the name of the agent completing the order: ";
-                cin >> agentName;
-                deliverySystem.completeOrder(agentName);
-                break;
-            }
-            case 5: {
-                int start, end;
-                cout << "Enter starting location (0-4): ";
-                cin >> start;
-                cout << "Enter destination location (0-4): ";
-                cin >> end;
-                deliverySystem.findShortestRoute(start, end);
-                break;
-            }
-            case 6: {
-                deliverySystem.displayAgentDetails();
-                break;
-            }
-            case 7: {
-                cout << "Exiting the system. Goodbye!\n";
-                return;
-            }
-            default: {
-                cout << "Invalid choice. Please try again.\n";
-                break;
-            }
+        case 1: {
+            string agentName;
+            cout << "Enter the name of the delivery agent: ";
+            cin >> agentName;
+            deliverySystem.addDeliveryAgent(agentName);
+            break;
+        }
+        case 2: {
+            int from, to, distance;
+            cout << "Enter starting location (0-4): ";
+            cin >> from;
+            cout << "Enter destination location (0-4): ";
+            cin >> to;
+            cout << "Enter distance between locations: ";
+            cin >> distance;
+            deliverySystem.addDeliveryRoute(from, to, distance);
+            break;
+        }
+        case 3: {
+            int orderID;
+            cout << "Enter the order ID to assign: ";
+            cin >> orderID;
+            deliverySystem.assignAgent(orderID);
+            break;
+        }
+        case 4: {
+            string agentName;
+            cout << "Enter the name of the agent completing the order: ";
+            cin >> agentName;
+            deliverySystem.completeOrder(agentName);
+            break;
+        }
+        case 5: {
+            int start, end;
+            cout << "Enter starting location (0-4): ";
+            cin >> start;
+            cout << "Enter destination location (0-4): ";
+            cin >> end;
+            deliverySystem.findShortestRoute(start, end);
+            break;
+        }
+        case 6: {
+            deliverySystem.displayAgentDetails();
+            break;
+        }
+        case 7:
+            cout << "Exiting the system. Goodbye!\n";
+            return;
+        default:
+            cout << "Invalid choice. Please try again.\n";
         }
     }
-
 }
-  
 
-int main()
-{   
+// Function to display the home menu
+void home() {
+    while (true) {
+        cout << "\nPlease choose an action:\n";
+        cout << "1. View Info\n";
+        cout << "2. Change Password\n";
+        cout << "3. Logout\n";
+        cout << "4. Browse Menu\n";
+        cout << "5. Manage Orders\n";
+        cout << "6. Manage Deliveries\n";
+        cout << "7. Manage Customers\n";
+        cout << "8. Quit\n";
+        cout << "Enter your choice: ";
+
+        int choice;
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            if (currentUser) {
+                currentUser->displayData();
+            } else {
+                cout << "No user is logged in.\n";
+            }
+            break;
+        case 2:
+            changePassword();
+            break;
+        case 3:
+            cout << "Logging out...\n";
+            delete currentUser; // Clean up currentUser
+            currentUser = nullptr;
+            return; // Return to main menu
+        case 4:
+            browseMenu();
+            break;
+        case 5:
+            order();
+            break;
+        case 6:
+            delivery();
+            break;
+        case 7:
+            customer();
+            break;
+        case 8:
+            return;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+        }
+    }
+}
+
+// Main function to display the main menu
+void mainMenu() {
+    
     loginPage();
-    home();
-    order();
-    delivery();
-   customer();
+    if (currentUser) {
+        home();
+    }
+}
+
+int main() {
+    mainMenu();
     return 0;
 }

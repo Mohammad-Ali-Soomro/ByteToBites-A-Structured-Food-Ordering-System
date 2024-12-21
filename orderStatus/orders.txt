@@ -1,0 +1,6 @@
+Order ID: 1
+Food Items: Burger,Pizza
+Delivery Details: sdaskjdkj,123213
+Status: Pending
+Timestamp: Sat Dec 21 19:01:27 2024
+
