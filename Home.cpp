@@ -16,6 +16,8 @@ void home();
 void order();
 void delivery();
 void mainMenu();
+void addMenuItem();
+void generateBill();
 
 // Function to change password
 void changePassword() {
@@ -344,6 +346,72 @@ void delivery() {
     }
 }
 
+// Function to add a new menu item (Admin only)
+void addMenuItem() {
+    if (currentUser && currentUser->role == 3) { // Check if the current user is an admin
+        string name, type;
+        int price, estimatedTime;
+        char location;
+
+        cout << "Enter the name of the new menu item: ";
+        cin.ignore();
+        getline(cin, name);
+        cout << "Enter the price of the new menu item: ";
+        cin >> price;
+        cout << "Enter the estimated time (in minutes) to prepare the new menu item: ";
+        cin >> estimatedTime;
+        cout << "Enter the location (e.g., 'A', 'B', 'C') of the new menu item: ";
+        cin >> location;
+        cout << "Enter the type (category) of the new menu item: ";
+        cin.ignore();
+        getline(cin, type);
+
+        ofstream menuFile("menu/menu.txt", ios::app);
+        if (menuFile.is_open()) {
+            menuFile << name << "," << price << "," << estimatedTime << "," << location << "," << type << endl;
+            menuFile.close();
+            cout << "New menu item added successfully!\n";
+        } else {
+            cout << "Failed to open the menu file.\n";
+        }
+    } else {
+        cout << "Error: Only admins can add new menu items.\n";
+    }
+}
+
+// Function to generate a total bill for the user
+void generateBill() {
+    MyOrder orderSystem;
+    double totalAmount = 0.0;
+
+    ifstream file("D:\\Dsa Project\\orderStatus\\orders.txt");
+    if (!file) {
+        cout << "Error: Unable to open orders file.\n";
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.find("Food Items:") != string::npos) {
+            string foodItems = line.substr(line.find(":") + 2);
+            istringstream iss(foodItems);
+            string item;
+            while (getline(iss, item, ',')) {
+                // Assuming the price is included in the item string
+                // Example: "Burger 599"
+                size_t pos = item.find_last_of(' ');
+                if (pos != string::npos) {
+                    double price = stod(item.substr(pos + 1));
+                    totalAmount += price;
+                }
+            }
+        }
+    }
+    file.close();
+
+    cout << "Total Amount Bill: Rs " << totalAmount << endl;
+}
+
 // Function to display the home menu
 void home() {
     while (true) {
@@ -355,7 +423,11 @@ void home() {
         cout << "5. Manage Orders\n";
         cout << "6. Manage Deliveries\n";
         cout << "7. Manage Customers\n";
-        cout << "8. Quit\n";
+        cout << "8. Generate Bill\n";
+        if (currentUser && currentUser->role == 3) {
+            cout << "9. Add Menu Item (Admin Only)\n";
+        }
+        cout << "10. Quit\n";
         cout << "Enter your choice: ";
 
         int choice;
@@ -390,6 +462,16 @@ void home() {
             customer();
             break;
         case 8:
+            generateBill();
+            break;
+        case 9:
+            if (currentUser && currentUser->role == 3) {
+                addMenuItem();
+            } else {
+                cout << "Invalid choice. Please try again.\n";
+            }
+            break;
+        case 10:
             return;
         default:
             cout << "Invalid choice. Please try again.\n";
@@ -399,7 +481,6 @@ void home() {
 
 // Main function to display the main menu
 void mainMenu() {
-    
     loginPage();
     if (currentUser) {
         home();

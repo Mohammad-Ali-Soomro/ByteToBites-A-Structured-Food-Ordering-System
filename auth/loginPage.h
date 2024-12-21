@@ -118,8 +118,9 @@ void loginAdmin() {
         currentUser = new CurrentAdmin(username, password);
     } else {
         displayErrorMessage("Invalid credentials or account not found.");
+        loginPage();
     }
-    loginPage();
+    
 }
 
 // Registration function for users and riders

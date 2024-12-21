@@ -1,5 +1,4 @@
-#ifndef CURRENT_USER_DATA_H
-#define CURRENT_USER_DATA_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -88,4 +87,4 @@ public:
     }
 };
 
-#endif // CURRENT_USER_DATA_H
+
