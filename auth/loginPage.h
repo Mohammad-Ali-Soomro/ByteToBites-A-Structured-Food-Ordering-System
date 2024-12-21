@@ -12,9 +12,9 @@ using namespace std;
 // Global user pointer
 CurrentUser* currentUser = nullptr; // Initialize global pointer to store the logged-in user
 
-const string USERS_FILE = "D:\\Dsa Project\\auth\\users.txt";
-const string RIDERS_FILE = "D:\\Dsa Project\\auth\\riders.txt";
-const string ADMINS_FILE = "D:\\Dsa Project\\auth\\admins.txt";
+const string USERS_FILE = "auth/users.txt";
+const string RIDERS_FILE = "auth/riders.txt";
+const string ADMINS_FILE = "auth/admins.txt";
 
 // Function prototypes
 void loginUser();
