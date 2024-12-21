@@ -19,6 +19,12 @@ void mainMenu();
 void addMenuItem();
 void generateBill();
 
+// Function to clear terminal
+void clearScreen() {
+    cout << string(100, '\n');  // Prints 100 newlines to mimic a clear screen
+}
+
+
 // Function to change password
 void changePassword() {
     if (!currentUser) {
@@ -252,6 +258,8 @@ void order() {
             break;
         }
         case 5: {
+            if (currentUser && currentUser->role == 3)
+            {
             int orderID;
             string newStatus;
             cout << "Enter Order ID to update: ";
@@ -261,6 +269,12 @@ void order() {
             getline(cin, newStatus);
             orderSystem.updateOrderStatus(orderID, newStatus);
             break;
+            }
+            else
+            {
+                cout<<"You do not have admin privileges! \nChoose another option \n";
+                break;
+            }
         }
         case 6:
             cout << "Exiting the system. Goodbye!\n";
@@ -384,7 +398,7 @@ void generateBill() {
     MyOrder orderSystem;
     double totalAmount = 0.0;
 
-    ifstream file("D:\\Dsa Project\\orderStatus\\orders.txt");
+    ifstream file("orderStatus/orders.txt");
     if (!file) {
         cout << "Error: Unable to open orders file.\n";
         return;
@@ -435,6 +449,7 @@ void home() {
 
         switch (choice) {
         case 1:
+            clearScreen();
             if (currentUser) {
                 currentUser->displayData();
             } else {
@@ -442,29 +457,37 @@ void home() {
             }
             break;
         case 2:
+            clearScreen();
             changePassword();
             break;
         case 3:
+            clearScreen();
             cout << "Logging out...\n";
             delete currentUser; // Clean up currentUser
             currentUser = nullptr;
             return; // Return to main menu
         case 4:
+            clearScreen();
             browseMenu();
             break;
         case 5:
+            clearScreen();
             order();
             break;
         case 6:
+            clearScreen();
             delivery();
             break;
         case 7:
+            clearScreen();
             customer();
             break;
         case 8:
+            clearScreen();
             generateBill();
             break;
         case 9:
+            clearScreen();
             if (currentUser && currentUser->role == 3) {
                 addMenuItem();
             } else {
@@ -483,6 +506,7 @@ void home() {
 void mainMenu() {
     loginPage();
     if (currentUser) {
+        clearScreen();
         home();
     }
 }
