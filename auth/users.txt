@@ -1,5 +1,1 @@
-ali 123
-meow
-500
-ali 123 300
-Zeeshan meow 5000
+ali meow1 500

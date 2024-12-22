@@ -1,12 +1,11 @@
 #pragma once
 
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <queue>
 #include <ctime>
+#include <unordered_set>
 
 using namespace std;
 
@@ -24,6 +23,7 @@ private:
     OrderNode* head;
     OrderNode* tail;
     int orderCount;
+    unordered_set<string> currentOrderItems; // Set to store current order items
 
     // Helper function to generate unique Order ID
     int generateOrderID() {
@@ -94,6 +94,13 @@ public:
                  << "Status: " << initialStatus << "\n"
                  << "Timestamp: " << getCurrentTime() << "\n\n";
             file.close();
+        }
+
+        // Add items to current order set
+        istringstream iss(foodItems);
+        string item;
+        while (getline(iss, item, ',')) {
+            currentOrderItems.insert(item);
         }
 
         cout << "Order placed successfully! Your Order ID is: " << newOrderID << endl;
@@ -180,6 +187,9 @@ public:
 
         cout << "Order Status for Order ID " << orderID << ": " << current->status << endl;
     }
+
+    // New method to check if an item is in the current order
+    bool isItemInOrder(const string& itemName) const {
+        return currentOrderItems.find(itemName) != currentOrderItems.end();
+    }
 };
-
-
