@@ -433,12 +433,22 @@ void home() {
         cout << "1. View Info\n";
         cout << "2. Change Password\n";
         cout << "3. Logout\n";
+        if(currentUser->role==1 || currentUser->role ==3)//user or admin
+        {
         cout << "4. Browse Menu\n";
+        }
+        if(currentUser->role==1)//user
+        {
         cout << "5. Manage Orders\n";
-        cout << "6. Manage Deliveries\n";
-        cout << "7. Manage Customers\n";
         cout << "8. Generate Bill\n";
-        if (currentUser && currentUser->role == 3) {
+        }
+        if(currentUser->role ==2)//rider
+        {
+        cout << "6. Manage Deliveries\n";
+        }
+        if (currentUser && currentUser->role == 3) //admin
+        {
+            cout << "7. Manage Customers\n";
             cout << "9. Add Menu Item (Admin Only)\n";
         }
         cout << "10. Quit\n";
@@ -467,24 +477,59 @@ void home() {
             currentUser = nullptr;
             return; // Return to main menu
         case 4:
-            clearScreen();
-            browseMenu();
+            if(currentUser->role==1 || currentUser->role ==3)
+            {
+                clearScreen();
+                browseMenu();
+            }
+            else
+            {
+                cout<<"Invalid choice. Please try again.\n";
+            }
             break;
         case 5:
-            clearScreen();
-            order();
+            if(currentUser->role ==1)
+            {
+                clearScreen();
+                order();
+            }
+            else
+            {
+                cout<<"Invalid choice. Please try again.\n";
+            }
             break;
         case 6:
-            clearScreen();
-            delivery();
-            break;
+            if(currentUser->role == 2)
+            {
+                clearScreen();
+                delivery();
+            }
+            else
+            {
+                cout<<"Invalid choice. Please try again\n";
+            }
+                break;
         case 7:
-            clearScreen();
-            customer();
-            break;
+            if(currentUser->role=3)
+            {
+                clearScreen();
+                customer();
+            }
+            else
+            {
+                cout<<"Invalid choice. Please try again\n";
+            }
+                break;
         case 8:
+            if(currentUser->role == 1)
+            {
             clearScreen();
             generateBill();
+            }
+        else
+        {
+            cout<<"Invalid choice. Please try again\n";
+        }
             break;
         case 9:
             clearScreen();
