@@ -117,7 +117,10 @@ void browseMenu() {
 
     while (true) {
         cout << "\nChoose an action:\n";
-        cout << "1. Manually choose an item to add to your order\n";
+        if(currentUser && currentUser->role == 1)
+        {
+            cout << "1. Manually choose an item to add to your order\n";
+        }
         cout << "2. Filter by type\n";
         cout << "3. Go back\n";
         cout << "Enter your choice: ";
@@ -145,8 +148,9 @@ void browseMenu() {
             if (!filteredItems.empty()) {
                 // Allow user to choose an item from the filtered list
                 cout << "\nChoose an item by index to add to your order (or 0 to skip): ";
+                if(currentUser->role==1)
+                {
                 size_t index = getValidatedInput(0, filteredItems.size());
-
                 if (index > 0 && index <= filteredItems.size()) {
                     MenuItem* selectedItem = filteredItems[index - 1];
                     cout << "You selected: ";
@@ -157,8 +161,14 @@ void browseMenu() {
                     // Placeholder: You can now add the selectedItem to an order list
                     // Example: orders.push_back(selectedItem);
                 }
+                }
+                else{
+                    cout<<"Admins cannot order food from menu.\n";
+                }
             }
         } else if (choice == 1) {
+            if(currentUser->role ==1)
+            {
             // Manual selection
             cout << "\nEnter the index of the item to add to your order (or 0 to go back): ";
             size_t index = getValidatedInput(0, menu.getItems().size());
@@ -172,6 +182,11 @@ void browseMenu() {
                 chooseOrder();
                 // Placeholder: Add selectedItem to an order list
                 // Example: orders.push_back(selectedItem);
+            }
+            }
+            else
+            {
+                cout<<"Admins cannot order food from menu.\n";
             }
         }
     }
