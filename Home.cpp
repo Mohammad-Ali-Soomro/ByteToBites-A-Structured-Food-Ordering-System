@@ -526,3 +526,5 @@ int main() {
     mainMenu();
     return 0;
 }
+
+// this is the updated file with proper functions added
