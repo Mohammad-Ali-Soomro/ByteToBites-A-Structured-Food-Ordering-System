@@ -1,0 +1,39 @@
+
+=== Bill #1 ===
+Customer: ali
+Date: Thu Dec 26 23:15:52 2024
+
+Items ordered:
+--------------------------------
+Ice Cream                           Rs. 399.00
+--------------------------------
+Subtotal:                           Rs. 399.00
+Tax (5%):                           Rs. 19.95
+Final Amount:                       Rs. 418.95
+================================
+
+=== Bill #1 ===
+Customer: sahil
+Date: Thu Dec 26 23:25:19 2024
+
+Items ordered:
+--------------------------------
+bazinga                             Rs. 800.00
+--------------------------------
+Subtotal:                           Rs. 800.00
+Tax (5%):                           Rs. 40.00
+Final Amount:                       Rs. 840.00
+================================
+
+=== Bill #1 ===
+Customer: rafay
+Date: Fri Dec 27 10:27:03 2024
+
+Items ordered:
+--------------------------------
+Burger                              Rs. 599.00
+--------------------------------
+Subtotal:                           Rs. 599.00
+Tax (5%):                           Rs. 29.95
+Final Amount:                       Rs. 628.95
+================================

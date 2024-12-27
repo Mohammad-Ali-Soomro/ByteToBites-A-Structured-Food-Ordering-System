@@ -1,18 +1,65 @@
 Order ID: 1
 Food Items: Burger,Pizza
 Delivery Details: sdaskjdkj,123213
-Status: Pending
+Status: Assigned to Rider
+Delivery Agent: Ali
 Timestamp: Sat Dec 21 19:01:27 2024
 
 Order ID: 1
 Food Items: Pizza
 Delivery Details: dsds,2121
-Status: Pending
+Status: Assigned to Rider
+Delivery Agent: Ali
 Timestamp: Sun Dec 22 20:13:05 2024
 
 Order ID: 1
 Food Items: Pizza, Burger
 Delivery Details: dasdsa,2323
-Status: Pending
+Status: Assigned to Rider
+Delivery Agent: Ali
 Timestamp: Sun Dec 22 20:36:56 2024
 
+
+=== Order Details ===
+Order ID: 1
+Username: ali
+Date: Thu Dec 26 23:15:52 2024
+Items:
+- Ice Cream (Rs. 399)
+
+Subtotal: Rs. 399
+Tax (5%): Rs. 19.95
+Total Amount: Rs. 418.95
+Delivery Details: dsada,221
+Status: Assigned to Rider
+Delivery Agent: Ali
+===================
+
+=== Order Details ===
+Order ID: 1
+Username: sahil
+Date: Thu Dec 26 23:25:19 2024
+Items:
+- bazinga (Rs. 800)
+
+Subtotal: Rs. 800
+Tax (5%): Rs. 40
+Total Amount: Rs. 840
+Delivery Details: dsds,212
+Status: Assigned to Rider
+Delivery Agent: Ali
+===================
+
+=== Order Details ===
+Order ID: 1
+Username: rafay
+Date: Fri Dec 27 10:27:03 2024
+Items:
+- Burger (Rs. 599)
+
+Subtotal: Rs. 599
+Tax (5%): Rs. 29.95
+Total Amount: Rs. 628.95
+Delivery Details: dsd,2121
+Status: Pending
+===================

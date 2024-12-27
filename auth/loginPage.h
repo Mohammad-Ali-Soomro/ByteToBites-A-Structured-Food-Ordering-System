@@ -12,9 +12,9 @@ using namespace std;
 // Global user pointer
 CurrentUser* currentUser = nullptr; // Initialize global pointer to store the logged-in user
 
-const string USERS_FILE = "auth/users.txt";
-const string RIDERS_FILE = "auth/riders.txt";
-const string ADMINS_FILE = "auth/admins.txt";
+const string USERS_FILE = "D:\\GIKI\\SEMESTER 03\\DSA\\Semester Project\\Dsa Project\\auth\\users.txt";
+const string RIDERS_FILE = "D:\\GIKI\\SEMESTER 03\\DSA\\Semester Project\\Dsa Project\\auth\\riders.txt";
+const string ADMINS_FILE = "D:\\GIKI\\SEMESTER 03\\DSA\\Semester Project\\Dsa Project\\auth\\admins.txt";
 
 // Function prototypes
 void loginUser();
@@ -48,8 +48,9 @@ void loginUser() {
     while (userFile >> fileUsername >> filePassword >> fileBalance) {
         if (fileUsername == username && filePassword == password) {
             userFound = true;
-            if (currentUser) delete currentUser; // Clean up previous user
-            currentUser = new CurrentCustomer(username, password, fileBalance);
+            if (currentUser) delete currentUser;
+            currentUser = new CurrentUser(username, password, fileBalance);
+            currentUser->role = 1;
             break;
         }
     }
@@ -57,7 +58,7 @@ void loginUser() {
 
     if (userFound) {
         cout << "Login successful! Welcome, " << username << "!\n";
-       // userMenu();
+        cout << "Your current balance: Rs. " << currentUser->getBalance() << endl;
     } else {
         displayErrorMessage("Invalid credentials or account not found.");
         userMenu();

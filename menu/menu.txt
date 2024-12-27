@@ -9,3 +9,4 @@ Steak,1599,30,B,Grill
 Tacos,749,12,A,Fast Food
 Fried Chicken,899,20,B,Fast Food
 bazinga,800,9,A,C
+Pasta Crunch,90,11,A,Noodles

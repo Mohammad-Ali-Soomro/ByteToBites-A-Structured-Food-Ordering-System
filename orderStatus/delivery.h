@@ -55,15 +55,23 @@ public:
     }
 
     // Assign an available agent to an order
-    void assignAgent(int orderID) {
-        for (auto& agent : agents) {
-            if (agent.isAvailable) {
-                agent.isAvailable = false;
-                cout << "Order " << orderID << " assigned to agent: " << agent.name << "\n";
-                return;
+    bool assignAgent(int orderID, const string& agentName) {
+        // Check if agent exists
+        bool agentFound = false;
+        for (const auto& agent : agents) {
+            if (agent.name == agentName) {
+                agentFound = true;
+                break;
             }
         }
-        cout << "No available agents for order " << orderID << ".\n";
+
+        if (!agentFound) {
+            cout << "Error: Agent " << agentName << " not found.\n";
+            return false;
+        }
+
+        cout << "Agent " << agentName << " assigned to order #" << orderID << endl;
+        return true;
     }
 
     // Mark an order as delivered
